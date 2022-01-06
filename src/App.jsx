@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import "./App.css";
 import Header from "./components/header/header.component";
 import HomePage from "./pages/homepage/hompage.component.jsx";
@@ -16,7 +16,7 @@ import {
 import { createStructuredSelector } from "reselect";
 import { selectCurrentUser } from "./redux/user/user.selectors";
 
-import {setCurrentUser} from './redux/user/user.actions';
+import { setCurrentUser } from "./redux/user/user.actions";
 
 class App extends React.Component {
   // constructor() {
@@ -30,8 +30,7 @@ class App extends React.Component {
   unSubscibeFromAuth = null;
 
   componentDidMount() {
-
-    const {setCurrentUser} = this.props;
+    const { setCurrentUser } = this.props;
 
     this.unSubscibeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
       if (userAuth) {
@@ -39,14 +38,12 @@ class App extends React.Component {
 
         onSnapshot(userRef, (doc) => {
           setCurrentUser({
-              id: doc.id,
-              ...doc.data(),
+            id: doc.id,
+            ...doc.data(),
           });
         });
       } else {
-        setCurrentUser({
-          userAuth,
-        });
+        setCurrentUser(userAuth);
       }
     });
   }
@@ -56,7 +53,6 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.props.currentUser);
     return (
       <div>
         <Header />
@@ -64,8 +60,15 @@ class App extends React.Component {
           <Route path="/" element={<HomePage />}></Route>
           <Route path="/shop/*" element={<ShopPage />}></Route>
           <Route path="/checkout" element={<CheckOutPage />}></Route>
-          <Route path="/signin" 
-            element={this.props.currentUser ? <Navigate replace to='/' /> : <SignInAndSignUpPage />}
+          <Route
+            path="/signin"
+            element={
+              this.props.currentUser ? (
+                <Navigate replace to="/" />
+              ) : (
+                <SignInAndSignUpPage />
+              )
+            }
           ></Route>
         </Routes>
       </div>
@@ -73,12 +76,12 @@ class App extends React.Component {
   }
 }
 
-const mapStateToProps = createStructuredSelector ({
-  currentUser: selectCurrentUser
-})
-
-const mapDispatchToProps = dispatch => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
 });
 
-export default connect(mapStateToProps,  mapDispatchToProps)(App);
+const mapDispatchToProps = (dispatch) => ({
+  setCurrentUser: (user) => dispatch(setCurrentUser(user)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
