@@ -14,7 +14,10 @@ import {
     getDoc,
     doc,
     onSnapshot,
-    setDoc
+    setDoc,
+    writeBatch,
+    collection,
+    getDocs
 } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -80,6 +83,8 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
 
 export {onSnapshot, createUserWithEmailAndPassword, signInWithEmailAndPassword};
 
+export {collection, getDocs}
+
 export const signInWithGoogle = () => signInWithPopup(auth, provider)
     .then((result) => {
         return result;
@@ -87,6 +92,35 @@ export const signInWithGoogle = () => signInWithPopup(auth, provider)
         return error;
     });
 
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
 
+    const batch = writeBatch(firestore);
+
+     objectsToAdd.forEach(obj => {
+        const newDocRef = doc(firestore, collectionKey, obj.title)
+        batch.set(newDocRef, obj)
+    });
+
+    return await batch.commit();
+}
+
+export const convertCollectionsSnapshotToMap = (collections) => {
+    const transformedCollection = collections.docs.map(doc => {
+        const {title, items} = doc.data();
+
+        return {
+            routeName: encodeURI(title.toLowerCase()),
+            id: doc.id,
+            title,
+            items
+        }
+    });
+
+    return transformedCollection.reduce((accumulator, collection) => {
+        accumulator[collection.title.toLowerCase()] = collection;
+        return accumulator;
+    }, {});
+
+}
 
 export default app;
