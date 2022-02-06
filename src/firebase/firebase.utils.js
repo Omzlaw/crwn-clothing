@@ -35,14 +35,14 @@ const firebaseConfig = {
 };
 
 
-// Initialize Firebase
+// Initialize Firebase 
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth();
 export const firestore = getFirestore();
 
-const provider = new GoogleAuthProvider();
-provider.setCustomParameters({
+export const googleProvider = new GoogleAuthProvider();
+googleProvider.setCustomParameters({
     // prompt: 'select account'
 });
 
@@ -77,7 +77,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
     }
 
 
-    return userRef;
+    return {userRef, snapshot};
 }
 
 
@@ -85,11 +85,12 @@ export {onSnapshot, createUserWithEmailAndPassword, signInWithEmailAndPassword};
 
 export {collection, getDocs}
 
-export const signInWithGoogle = () => signInWithPopup(auth, provider)
+export const signInWithGoogle = () => signInWithPopup(auth, googleProvider)
     .then((result) => {
         return result;
     }).catch((error) => {
-        return error;
+        // return error;
+        console.log(error);
     });
 
 export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {

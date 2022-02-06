@@ -20,6 +20,7 @@ import {
 } from "./header.styles.jsx";
 
 const Header = ({ currentUser, hidden }) => {
+  
   console.log(`Current user from Header is: ${JSON.stringify(currentUser)}`);
   return (
     <HeaderContainer className="header">

@@ -40,6 +40,7 @@ const getButtonStyles = props => {
   }
 
   return props.inverted ? invertedButtonStyles : buttonStyles;
+  
 };
 
 export const CustomButtonContainer = styled.button`
