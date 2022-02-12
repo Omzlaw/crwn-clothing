@@ -7,6 +7,8 @@ import HomePage from "./pages/homepage/hompage.component.jsx";
 import ShopPage from "./pages/shop/shop.component.jsx";
 import SignInAndSignUpPage from "./pages/sign-in-and-sign-up/sign-in-and-sign-up.component";
 import CheckOutPage from "./pages/checkout/checkout.component";
+
+import { checkUserSessions } from "./redux/user/user.actions";
 // import {
 //   auth,
 //   createUserProfileDocument,
@@ -14,11 +16,11 @@ import CheckOutPage from "./pages/checkout/checkout.component";
 //   onSnapshot,
 // } from "./firebase/firebase.utils";
 
-import { createStructuredSelector } from "reselect";
-import { selectCurrentUser } from "./redux/user/user.selectors";
+// import { createStructuredSelector } from "reselect";
+// import { selectCurrentUser } from "./redux/user/user.selectors";
 
-import { setCurrentUser } from "./redux/user/user.actions";
-import {selectCollectionsForPreview} from './redux/shop/shop.selectors';
+// import { setCurrentUser } from "./redux/user/user.actions";
+// import {selectCollectionsForPreview} from './redux/shop/shop.selectors';
 class App extends React.Component {
   // constructor() {
   //   super();
@@ -32,6 +34,7 @@ class App extends React.Component {
   unSubscibeFromAuth = null;
 
   componentDidMount() {
+
     // const { setCurrentUser, collectionsArray } = this.props;
 
     // this.unSubscibeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
@@ -49,6 +52,8 @@ class App extends React.Component {
     //   }
     //   // addCollectionAndDocuments('collections', collectionsArray.map(({title, items}) => ({title, items})) )
     // });
+    const  {checkUserSessions} = this.props;
+    checkUserSessions();
   }
 
   componentWillUnmount() {
@@ -84,8 +89,8 @@ class App extends React.Component {
 //   collectionsArray: selectCollectionsForPreview
 // });
 
-// const mapDispatchToProps = (dispatch) => ({
-//   setCurrentUser: (user) => dispatch(setCurrentUser(user)),
-// });
+const mapDispatchToProps = (dispatch) => ({
+  checkUserSessions: () => dispatch(checkUserSessions()),
+});
 
-export default connect(null)(App);
+export default connect(null, mapDispatchToProps)(App);

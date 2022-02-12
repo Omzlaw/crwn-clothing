@@ -85,6 +85,15 @@ export {onSnapshot, createUserWithEmailAndPassword, signInWithEmailAndPassword};
 
 export {collection, getDocs}
 
+export const getCurrentUser = () => {
+    return new Promise((resolve, reject) => {
+        const unsubscribe = auth.onAuthStateChanged(userAuth => {
+            unsubscribe();
+            resolve(userAuth);
+        }, reject)
+    })
+}
+
 export const signInWithGoogle = () => signInWithPopup(auth, googleProvider)
     .then((result) => {
         return result;
