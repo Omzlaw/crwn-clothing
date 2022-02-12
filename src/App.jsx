@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import { connect } from "react-redux";
 import "./App.css";
@@ -9,85 +9,34 @@ import SignInAndSignUpPage from "./pages/sign-in-and-sign-up/sign-in-and-sign-up
 import CheckOutPage from "./pages/checkout/checkout.component";
 
 import { checkUserSessions } from "./redux/user/user.actions";
-// import {
-//   auth,
-//   createUserProfileDocument,
-//   addCollectionAndDocuments,
-//   onSnapshot,
-// } from "./firebase/firebase.utils";
 
-// import { createStructuredSelector } from "reselect";
-// import { selectCurrentUser } from "./redux/user/user.selectors";
+const App = ({ checkUserSessions, currentUser }) => {
 
-// import { setCurrentUser } from "./redux/user/user.actions";
-// import {selectCollectionsForPreview} from './redux/shop/shop.selectors';
-class App extends React.Component {
-  // constructor() {
-  //   super();
-
-  //   this.state = {
-  //     currentUser: null,
-  //   };
-  // }
-
-
-  unSubscibeFromAuth = null;
-
-  componentDidMount() {
-
-    // const { setCurrentUser, collectionsArray } = this.props;
-
-    // this.unSubscibeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
-    //   if (userAuth) {
-    //     const userRef = await createUserProfileDocument(userAuth);
-
-    //     onSnapshot(userRef, (doc) => {
-    //       setCurrentUser({
-    //         id: doc.id,
-    //         ...doc.data(),
-    //       });
-    //     });
-    //   } else {
-    //     setCurrentUser(userAuth);
-    //   }
-    //   // addCollectionAndDocuments('collections', collectionsArray.map(({title, items}) => ({title, items})) )
-    // });
-    const  {checkUserSessions} = this.props;
+  useEffect(() => {
     checkUserSessions();
-  }
+  }, [checkUserSessions]);
 
-  componentWillUnmount() {
-    // this.unSubscibeFromAuth();
-  }
-
-  render() {
-    return (
-      <div>
-        <Header />
-        <Routes>
-          <Route path="/" element={<HomePage />}></Route>
-          <Route path="/shop/*" element={<ShopPage />}></Route>
-          <Route path="/checkout" element={<CheckOutPage />}></Route>
-          <Route
-            path="/signin"
-            element={
-              this.props.currentUser ? (
-                <Navigate replace to="/" />
-              ) : (
-                <SignInAndSignUpPage />
-              )
-            }
-          ></Route>
-        </Routes>
-      </div>
-    );
-  }
-}
-
-// const mapStateToProps = createStructuredSelector({
-//   currentUser: selectCurrentUser,
-//   collectionsArray: selectCollectionsForPreview
-// });
+  return (
+    <div>
+      <Header />
+      <Routes>
+        <Route path="/" element={<HomePage />}></Route>
+        <Route path="/shop/*" element={<ShopPage />}></Route>
+        <Route path="/checkout" element={<CheckOutPage />}></Route>
+        <Route
+          path="/signin"
+          element={
+            currentUser ? (
+              <Navigate replace to="/" />
+            ) : (
+              <SignInAndSignUpPage />
+            )
+          }
+        ></Route>
+      </Routes>
+    </div>
+  );
+};
 
 const mapDispatchToProps = (dispatch) => ({
   checkUserSessions: () => dispatch(checkUserSessions()),
